@@ -14,7 +14,7 @@
         "version": "version(1.0)"
     },
     "host": "localhost:1323",
-    "basePath": "/",
+    "basePath": "/api",
     "paths": {
         "/cakes": {
             "get": {
@@ -193,25 +193,32 @@
             "type": "object",
             "properties": {
                 "created_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "false"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat digoreng dadakan"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1"
                 },
                 "image": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://linkketahubulat.jpg"
                 },
                 "rating": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 9
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat"
                 },
                 "updated_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2022-05-14 22:58:18"
                 }
             }
         },
@@ -225,16 +232,20 @@
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat digoreng dadakan"
                 },
                 "image": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://linkketahubulat.jpg"
                 },
                 "rating": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 9
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat"
                 }
             }
         },
@@ -259,18 +270,29 @@
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat digoreng dadakan"
                 },
                 "image": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://linkketahubulat.jpg"
                 },
                 "rating": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 9
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
         }
     }
 }

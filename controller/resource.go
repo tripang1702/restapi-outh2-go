@@ -9,7 +9,7 @@ import (
 	config "restapi-oauth2-go/config"
 	model "restapi-oauth2-go/model"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 // @Summary Get data all cake
@@ -28,7 +28,7 @@ func (co *Controller) GetCake(c echo.Context) error {
 
 	results, err := db.Query("SELECT * FROM cake_table")
 	if err != nil {
-		panic(err.Error())
+		log.Print(err.Error())
 	}
 	defer results.Close()
 
@@ -104,13 +104,14 @@ func (co *Controller) GetCakebyId(c echo.Context) error {
 func (co *Controller) CreatePostCake(c echo.Context) error {
 	conn := co.NewConnection()
 	db := config.ConnectDB(conn.Server, conn.Port, conn.User, conn.Password, conn.Database)
+	defer db.Close()
 
 	var postbody model.Cake
 
-	var datetime = time.Now()
-	dt := datetime.Format(time.RFC3339)
+	loc, _ := time.LoadLocation("Asia/Bangkok")
+	t := time.Now().In(loc)
 
-	defer db.Close()
+	dt := fmt.Sprintf("%d-%d-%d %d:%d:%d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 
 	errbind := c.Bind(&postbody)
 	if errbind != nil {
@@ -138,7 +139,10 @@ func (co *Controller) CreatePostCake(c echo.Context) error {
 		}
 	}
 
-	return errd
+	return c.JSON(http.StatusNotImplemented, map[string]interface{}{
+		"Status":  false,
+		"Message": errd.Error(),
+	})
 }
 
 // @Summary Delete data cake by id
@@ -187,7 +191,10 @@ func (co *Controller) DeleteCake(c echo.Context) error {
 		}
 	}
 
-	return errdel
+	return c.JSON(http.StatusNotImplemented, map[string]interface{}{
+		"Status":  false,
+		"Message": errdel.Error(),
+	})
 }
 
 // @Summary Patch data cake by id
@@ -209,8 +216,10 @@ func (co *Controller) UpdatePatchCake(c echo.Context) error {
 
 	var postbody model.UpdateCake
 
-	var datetime = time.Now()
-	dt := datetime.Format(time.RFC3339)
+	loc, _ := time.LoadLocation("Asia/Bangkok")
+	t := time.Now().In(loc)
+
+	dt := fmt.Sprintf("%d-%d-%d %d:%d:%d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 
 	errbind := c.Bind(&postbody)
 	if errbind != nil {
@@ -243,5 +252,8 @@ func (co *Controller) UpdatePatchCake(c echo.Context) error {
 		}
 	}
 
-	return errd
+	return c.JSON(http.StatusNotImplemented, map[string]interface{}{
+		"Status":  false,
+		"Message": errd.Error(),
+	})
 }

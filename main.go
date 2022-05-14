@@ -1,17 +1,30 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"restapi-oauth2-go/controller"
 
 	_ "restapi-oauth2-go/docs"
 
+	echoSwagger "restapi-oauth2-go/echo-swagger"
+
+	echoserver "github.com/dasjott/oauth2-echo-server"
 	"github.com/joho/godotenv"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
+	echoold "github.com/labstack/echo"
+	middlewareold "github.com/labstack/echo/middleware"
+	"gopkg.in/oauth2.v3/manage"
+	"gopkg.in/oauth2.v3/models"
+	"gopkg.in/oauth2.v3/server"
+	"gopkg.in/oauth2.v3/store"
 )
+
+type Usercred struct {
+	Username string
+	Password string
+	Id       string
+}
 
 // @title REST API PROJECT Golang
 // @version version(1.0)
@@ -24,25 +37,74 @@ import (
 // @license.name ahmadrifal
 
 // @host localhost:1323
-// @BasePath /
+// @BasePath /api
+
+// @securityDefinitions.apikey BearerAuth
+// @in query
+// @name access_token
+
 func main() {
-	e := echo.New()
-
-	// Middleware
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "[${method}] ${time_rfc3339} | ${remote_ip} | ${latency_human} | ${uri} | ${status}\n",
-	}))
-
-	e.Use(middleware.Recover())
-
-	ctrx := controller.NewController()
-
 	// load env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	// end
 
+	manager := manage.NewDefaultManager()
+
+	// token store
+	manager.MustTokenStorage(store.NewFileTokenStore("data.db"))
+
+	userCredList := []Usercred{
+		{
+			Username: os.Getenv("username1"),
+			Password: os.Getenv("password1"),
+			Id:       os.Getenv("userid1"),
+		},
+		{
+			Username: os.Getenv("username2"),
+			Password: os.Getenv("password2"),
+			Id:       os.Getenv("userid2"),
+		},
+	}
+
+	// client store
+	clientStore := store.NewClientStore()
+	clientStore.Set("admin", &models.Client{
+		ID:     "admin",
+		Secret: "adminxyz",
+		Domain: "http://localhost",
+		UserID: "admin",
+	})
+	manager.MapClientStorage(clientStore)
+
+	// Initialize the oauth2 service
+	echoserver.InitServer(manager)
+	echoserver.SetAllowGetAccessRequest(true)
+	echoserver.SetClientInfoHandler(server.ClientFormHandler)
+	echoserver.SetPasswordAuthorizationHandler(func(username, password string) (userID string, err error) {
+		for _, uc := range userCredList {
+			if uc.Username == username && uc.Password == password {
+				userID = uc.Id
+				return
+			}
+		}
+		err = fmt.Errorf("invalid username and password")
+		return
+
+	})
+
+	eold := echoold.New()
+
+	// Middleware
+	eold.Use(middlewareold.LoggerWithConfig(middlewareold.LoggerConfig{
+		Format: "[${method}] ${time_rfc3339} | ${remote_ip} | ${latency_human} | ${uri} | ${status}\n",
+	}))
+
+	eold.Use(middlewareold.Recover())
+
+	ctrx := controller.NewController()
 	server := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -50,15 +112,26 @@ func main() {
 	database := os.Getenv("DB_NAME")
 
 	ctrx.SetParamEnv(server, port, user, password, database)
-	// end
 
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
-	e.GET("/cakes", ctrx.GetCake)
-	e.GET("/cakes/:id", ctrx.GetCakebyId)
-	e.POST("/cakes", ctrx.CreatePostCake)
-	e.PATCH("/cakes/:id", ctrx.UpdatePatchCake)
-	e.DELETE("/cakes/:id", ctrx.DeleteCake)
+	eold.GET("/swagger/*", echoSwagger.WrapHandler)
+
+	auth := eold.Group("/oauth2")
+	{
+		auth.GET("/token", echoserver.HandleTokenRequest)
+	}
+
+	api := eold.Group("/api")
+	{
+		api.Use(echoserver.TokenHandler())
+		api.GET("/cakes", ctrx.GetCake)
+		api.GET("/cakes/:id", ctrx.GetCakebyId)
+		api.POST("/cakes", ctrx.CreatePostCake)
+		api.PATCH("/cakes/:id", ctrx.UpdatePatchCake)
+		api.DELETE("/cakes/:id", ctrx.DeleteCake)
+
+	}
 
 	// Start server
-	e.Logger.Fatal(e.Start("localhost:1323"))
+	// e.Logger.Fatal(e.Start("localhost:1323"))
+	eold.Logger.Fatal(eold.Start("localhost:1323"))
 }

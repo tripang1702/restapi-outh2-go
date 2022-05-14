@@ -1,31 +1,42 @@
-basePath: /
+basePath: /api
 definitions:
   model.Cake:
     properties:
       created_at:
+        example: "false"
         type: string
       description:
+        example: tahu bulat digoreng dadakan
         type: string
       id:
+        example: "1"
         type: string
       image:
+        example: http://linkketahubulat.jpg
         type: string
       rating:
+        example: 9
         type: number
       title:
+        example: tahu bulat
         type: string
       updated_at:
+        example: "2022-05-14 22:58:18"
         type: string
     type: object
   model.CreateCake:
     properties:
       description:
+        example: tahu bulat digoreng dadakan
         type: string
       image:
+        example: http://linkketahubulat.jpg
         type: string
       rating:
+        example: 9
         type: number
       title:
+        example: tahu bulat
         type: string
     required:
     - description
@@ -43,12 +54,16 @@ definitions:
   model.UpdateCake:
     properties:
       description:
+        example: tahu bulat digoreng dadakan
         type: string
       image:
+        example: http://linkketahubulat.jpg
         type: string
       rating:
+        example: 9
         type: number
       title:
+        example: tahu bulat
         type: string
     required:
     - description
@@ -181,4 +196,9 @@ paths:
       summary: Patch data cake by id
       tags:
       - Cake
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
 swagger: "2.0"

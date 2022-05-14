@@ -200,25 +200,32 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "false"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat digoreng dadakan"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1"
                 },
                 "image": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://linkketahubulat.jpg"
                 },
                 "rating": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 9
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat"
                 },
                 "updated_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2022-05-14 22:58:18"
                 }
             }
         },
@@ -232,16 +239,20 @@ const docTemplate = `{
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat digoreng dadakan"
                 },
                 "image": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://linkketahubulat.jpg"
                 },
                 "rating": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 9
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat"
                 }
             }
         },
@@ -266,18 +277,29 @@ const docTemplate = `{
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat digoreng dadakan"
                 },
                 "image": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://linkketahubulat.jpg"
                 },
                 "rating": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 9
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "tahu bulat"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
         }
     }
 }`
@@ -286,7 +308,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "version(1.0)",
 	Host:             "localhost:1323",
-	BasePath:         "/",
+	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "REST API PROJECT Golang",
 	Description:      "This is restful api project using golang.",
