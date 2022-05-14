@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  maridb:
+    image: mariadb
+    restart: always
+    container_name: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: TEST
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+    volumes:
+      - ./mysql-schema:/docker-entrypoint-initdb.d
+    networks :
+      - default
+  myapp :
+    build: .
+    container_name : myapp
+    ports:
+      - 1323:1323
+    working_dir : /app
+    networks :
+      - default

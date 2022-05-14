@@ -1,0 +1,184 @@
+basePath: /
+definitions:
+  model.Cake:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      rating:
+        type: number
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.CreateCake:
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      rating:
+        type: number
+      title:
+        type: string
+    required:
+    - description
+    - image
+    - rating
+    - title
+    type: object
+  model.MessageData:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  model.UpdateCake:
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      rating:
+        type: number
+      title:
+        type: string
+    required:
+    - description
+    - image
+    - rating
+    - title
+    type: object
+host: localhost:1323
+info:
+  contact:
+    email: rifalalfa1702@gmail.com
+    name: Tripang
+    url: https://www.instagram.com/tripang_panggang/
+  description: This is restful api project using golang.
+  license:
+    name: ahmadrifal
+  title: REST API PROJECT Golang
+  version: version(1.0)
+paths:
+  /cakes:
+    get:
+      consumes:
+      - application/x-json-stream
+      description: API get all data cake
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Cake'
+            type: array
+        "400":
+          description: ""
+      summary: Get data all cake
+      tags:
+      - Cake
+    post:
+      consumes:
+      - application/x-json-stream
+      description: API create data cake
+      parameters:
+      - description: Cake data
+        in: body
+        name: cakebody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCake'
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.CreateCake'
+            type: array
+        "400":
+          description: ""
+      summary: Post data cake by id
+      tags:
+      - Cake
+  /cakes/{id}:
+    delete:
+      consumes:
+      - application/x-json-stream
+      description: API delete data cake by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.MessageData'
+            type: array
+        "400":
+          description: ""
+      summary: Delete data cake by id
+      tags:
+      - Cake
+    get:
+      consumes:
+      - application/x-json-stream
+      description: API get data cake by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Cake'
+            type: array
+        "400":
+          description: ""
+      summary: Get data cake by id
+      tags:
+      - Cake
+    patch:
+      consumes:
+      - application/x-json-stream
+      description: API update data cake by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Cake data
+        in: body
+        name: cakebody
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateCake'
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.UpdateCake'
+            type: array
+        "400":
+          description: ""
+      summary: Patch data cake by id
+      tags:
+      - Cake
+swagger: "2.0"
