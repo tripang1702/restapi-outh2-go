@@ -28,3 +28,16 @@ type UpdateCake struct {
 	Rating      float32 `json:"rating" binding:"required" example:"9"`
 	Image       *string `json:"image" binding:"required" example:"http://linkketahubulat.jpg"`
 }
+
+type Tokensuccess struct {
+	Access_token  string `json:"access_token" example:"FXMCFR5JOKIQZCKL11OOFW"`
+	Expires_in    int    `json:"expires_in" example:"7200"`
+	Refresh_token string `json:"refresh_token" example:"TI3N8E_GUACZP6LLURBOCW"`
+	Scope         string `json:"scope" example:"read"`
+	Token_type    string `json:"token_type" example:"Bearer"`
+}
+
+type ErrorToken struct {
+	Error             string `json:"error" example:"server_error"`
+	Error_description string `json:"error_description" example:"The authorization server encountered an unexpected condition that prevented it from fulfilling the request"`
+}

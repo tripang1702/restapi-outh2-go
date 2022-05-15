@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /
 definitions:
   model.Cake:
     properties:
@@ -44,12 +44,40 @@ definitions:
     - rating
     - title
     type: object
+  model.ErrorToken:
+    properties:
+      error:
+        example: server_error
+        type: string
+      error_description:
+        example: The authorization server encountered an unexpected condition that
+          prevented it from fulfilling the request
+        type: string
+    type: object
   model.MessageData:
     properties:
       message:
         type: string
       status:
         type: boolean
+    type: object
+  model.Tokensuccess:
+    properties:
+      access_token:
+        example: FXMCFR5JOKIQZCKL11OOFW
+        type: string
+      expires_in:
+        example: 7200
+        type: integer
+      refresh_token:
+        example: TI3N8E_GUACZP6LLURBOCW
+        type: string
+      scope:
+        example: read
+        type: string
+      token_type:
+        example: Bearer
+        type: string
     type: object
   model.UpdateCake:
     properties:
@@ -75,19 +103,23 @@ host: localhost:1323
 info:
   contact:
     email: rifalalfa1702@gmail.com
-    name: Tripang
-    url: https://www.instagram.com/tripang_panggang/
+    name: Ahmad Rifal Alfarisi
+    url: https://www.instagram.com/tr_ipang/
   description: This is restful api project using golang.
-  license:
-    name: ahmadrifal
   title: REST API PROJECT Golang
   version: version(1.0)
 paths:
-  /cakes:
+  /api/cakes:
     get:
       consumes:
-      - application/x-json-stream
+      - application/json
       description: API get all data cake
+      parameters:
+      - description: Bearer Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -102,9 +134,14 @@ paths:
       - Cake
     post:
       consumes:
-      - application/x-json-stream
+      - application/json
       description: API create data cake
       parameters:
+      - description: Bearer Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Cake data
         in: body
         name: cakebody
@@ -123,12 +160,17 @@ paths:
       summary: Post data cake by id
       tags:
       - Cake
-  /cakes/{id}:
+  /api/cakes/{id}:
     delete:
       consumes:
-      - application/x-json-stream
+      - application/json
       description: API delete data cake by id
       parameters:
+      - description: Bearer Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: id
         in: path
         name: id
@@ -148,9 +190,14 @@ paths:
       - Cake
     get:
       consumes:
-      - application/x-json-stream
+      - application/json
       description: API get data cake by id
       parameters:
+      - description: Bearer Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: id
         in: path
         name: id
@@ -170,9 +217,14 @@ paths:
       - Cake
     patch:
       consumes:
-      - application/x-json-stream
+      - application/json
       description: API update data cake by id
       parameters:
+      - description: Bearer Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: id
         in: path
         name: id
@@ -196,9 +248,54 @@ paths:
       summary: Patch data cake by id
       tags:
       - Cake
-securityDefinitions:
-  APIKeyQueryParam:
-    in: query
-    name: access_token
-    type: apiKey
+  /oauth2/token:
+    get:
+      consumes:
+      - application/json
+      description: API to generate access token
+      parameters:
+      - description: 'Grant type (example : password, refresh_token)'
+        in: query
+        name: grant_type
+        required: true
+        type: string
+      - description: Client id
+        in: query
+        name: client_id
+        required: true
+        type: string
+      - description: Client secret
+        in: query
+        name: client_secret
+        required: true
+        type: string
+      - description: used when grant_type=password
+        in: query
+        name: username
+        type: string
+      - description: used when grant_type=password
+        in: query
+        name: password
+        type: string
+      - description: 'scope (example : read)'
+        in: query
+        name: scope
+        required: true
+        type: string
+      - description: used when grant_type=refresh_token
+        in: query
+        name: refresh_token
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Tokensuccess'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorToken'
+      summary: Get Access Token
+      tags:
+      - Authorization
 swagger: "2.0"

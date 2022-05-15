@@ -11,28 +11,34 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Tripang",
-            "url": "https://www.instagram.com/tripang_panggang/",
+            "name": "Ahmad Rifal Alfarisi",
+            "url": "https://www.instagram.com/tr_ipang/",
             "email": "rifalalfa1702@gmail.com"
-        },
-        "license": {
-            "name": "ahmadrifal"
         },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/cakes": {
+        "/api/cakes": {
             "get": {
                 "description": "API get all data cake",
                 "consumes": [
-                    "application/x-json-stream"
+                    "application/json"
                 ],
                 "tags": [
                     "Cake"
                 ],
                 "summary": "Get data all cake",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -51,13 +57,20 @@ const docTemplate = `{
             "post": {
                 "description": "API create data cake",
                 "consumes": [
-                    "application/x-json-stream"
+                    "application/json"
                 ],
                 "tags": [
                     "Cake"
                 ],
                 "summary": "Post data cake by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Cake data",
                         "name": "cakebody",
@@ -84,17 +97,24 @@ const docTemplate = `{
                 }
             }
         },
-        "/cakes/{id}": {
+        "/api/cakes/{id}": {
             "get": {
                 "description": "API get data cake by id",
                 "consumes": [
-                    "application/x-json-stream"
+                    "application/json"
                 ],
                 "tags": [
                     "Cake"
                 ],
                 "summary": "Get data cake by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "id",
@@ -121,13 +141,20 @@ const docTemplate = `{
             "delete": {
                 "description": "API delete data cake by id",
                 "consumes": [
-                    "application/x-json-stream"
+                    "application/json"
                 ],
                 "tags": [
                     "Cake"
                 ],
                 "summary": "Delete data cake by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "id",
@@ -154,13 +181,20 @@ const docTemplate = `{
             "patch": {
                 "description": "API update data cake by id",
                 "consumes": [
-                    "application/x-json-stream"
+                    "application/json"
                 ],
                 "tags": [
                     "Cake"
                 ],
                 "summary": "Patch data cake by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "id",
@@ -190,6 +224,80 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": ""
+                    }
+                }
+            }
+        },
+        "/oauth2/token": {
+            "get": {
+                "description": "API to generate access token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authorization"
+                ],
+                "summary": "Get Access Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Grant type (example : password, refresh_token)",
+                        "name": "grant_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Client id",
+                        "name": "client_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Client secret",
+                        "name": "client_secret",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "used when grant_type=password",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "used when grant_type=password",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "scope (example : read)",
+                        "name": "scope",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "used when grant_type=refresh_token",
+                        "name": "refresh_token",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Tokensuccess"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorToken"
+                        }
                     }
                 }
             }
@@ -256,6 +364,19 @@ const docTemplate = `{
                 }
             }
         },
+        "model.ErrorToken": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "server_error"
+                },
+                "error_description": {
+                    "type": "string",
+                    "example": "The authorization server encountered an unexpected condition that prevented it from fulfilling the request"
+                }
+            }
+        },
         "model.MessageData": {
             "type": "object",
             "properties": {
@@ -264,6 +385,31 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "boolean"
+                }
+            }
+        },
+        "model.Tokensuccess": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "FXMCFR5JOKIQZCKL11OOFW"
+                },
+                "expires_in": {
+                    "type": "integer",
+                    "example": 7200
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": "TI3N8E_GUACZP6LLURBOCW"
+                },
+                "scope": {
+                    "type": "string",
+                    "example": "read"
+                },
+                "token_type": {
+                    "type": "string",
+                    "example": "Bearer"
                 }
             }
         },
@@ -294,13 +440,6 @@ const docTemplate = `{
                 }
             }
         }
-    },
-    "securityDefinitions": {
-        "BearerAuth": {
-            "type": "apiKey",
-            "name": "access_token",
-            "in": "query"
-        }
     }
 }`
 
@@ -308,7 +447,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "version(1.0)",
 	Host:             "localhost:1323",
-	BasePath:         "/api",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "REST API PROJECT Golang",
 	Description:      "This is restful api project using golang.",

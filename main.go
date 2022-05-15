@@ -30,18 +30,12 @@ type Usercred struct {
 // @version version(1.0)
 // @description This is restful api project using golang.
 
-// @contact.name Tripang
-// @contact.url https://www.instagram.com/tripang_panggang/
+// @contact.name Ahmad Rifal Alfarisi
+// @contact.url https://www.instagram.com/tr_ipang/
 // @contact.email rifalalfa1702@gmail.com
 
-// @license.name ahmadrifal
-
 // @host localhost:1323
-// @BasePath /api
-
-// @securityDefinitions.apikey BearerAuth
-// @in query
-// @name access_token
+// @BasePath /
 
 func main() {
 	// load env
@@ -117,7 +111,7 @@ func main() {
 
 	auth := eold.Group("/oauth2")
 	{
-		auth.GET("/token", echoserver.HandleTokenRequest)
+		auth.GET("/token", ctrx.HandleTokenRequest)
 	}
 
 	api := eold.Group("/api")
@@ -128,10 +122,8 @@ func main() {
 		api.POST("/cakes", ctrx.CreatePostCake)
 		api.PATCH("/cakes/:id", ctrx.UpdatePatchCake)
 		api.DELETE("/cakes/:id", ctrx.DeleteCake)
-
 	}
 
 	// Start server
-	// e.Logger.Fatal(e.Start("localhost:1323"))
-	eold.Logger.Fatal(eold.Start("localhost:1323"))
+	eold.Logger.Fatal(eold.Start(":1323"))
 }
