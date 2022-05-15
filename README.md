@@ -94,4 +94,4 @@ Reference :
 - https://github.com/swaggo/echo-swagger
 - https://github.com/go-sql-driver/mysql
 - https://github.com/joho/godotenv
-- etc
+- https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/#:~:text=To%20convert%20the%20docker%2Dcompose,%2Df%20.&text=Your%20deployments%20are%20running%20in%20Kubernetes.
