@@ -1,9 +1,14 @@
 # restapi-outh2-go
-Restful API using echo Go and ouath2 authentification and swagger documentation.
+Restful API using echo Go and ouath2 authentification and swagger documentation. <br>
 
-How to build the service with docker.
+Diagram authorization <br>
+<p align="center">
+  <img src="https://github.com/tripang1702/restapi-outh2-go/blob/main/asset/rest-go-project.jpg" alt="accessibility text">
+</p>
 
-docker-compose.yml :
+<br>
+How to build the service with docker-compose.yml :
+
 ```bash
 version: '3.1'
 
