@@ -60,7 +60,14 @@ Then, build using docker-compose syntax.
 ```bash
 sudo docker-compose up --build -d
 ```
-
+how to convert docker-compose.yml to kubernetes yaml
+```bash 
+cd mysql-schema
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.26.0/kompose-darwin-amd64 -o kompose
+chmod +x kompose
+sudo mv ./kompose /usr/local/bin/kompose
+kompose convert
+```
 if the container are running, we can run this url
 http://localhost:1323/swagger/index.html
 
